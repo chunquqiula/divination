@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="./lib/js/jquery-3.2.1.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+        body{
+            background: #959c87;
+        }
+        button{
+            display: block;
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            margin: 10px auto;
+            background:  #95C;
+            color: #FFF69B;
+            text-align: center;
+        }
+        .low{
+            text-align: center;
+            margin-top: 10px;
+        }
+        .low span{
+            margin: 0 10px;
+        }
+        .content2{
+            display: none;
+            padding: 30px;
+            text-align: center;
+            font-size:  30px;
+        }
+        .content2 .img{
+            margin: 40px auto;
+        }
+        .content2 .img img{
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="content1">
+        <button class="button">开始</button>
+        <div class="low">
+            <span class="qian1"></span>
+            <span class="qian2"></span>
+            <span class="qian3"></span>
+        </div>
+        <!-- <button class="btn1">重新开始</button> -->
+    </div>
+    <div class="content2">
+        <div class="img"></div>
+        <p></p>
+        <!--<button class="btn2">再来一次</button>-->
+    </div>
+
+</body>
+<script>
+        /**
+         * 获取随机（0,1）数函数
+         * */
+        function rand () {
+            return  Math.round(Math.random());
+        }
+        //定义三钱变量
+        var a,b,c;
+        //定义单爻数组
+        var list = [];
+        //定义单卦数组
+        var all = [];
+        //定义新的数组
+        var news = [];
+        
+        //定义三个定时器
+        var lop1,lop2,lop3;
+        //计算次数
+        var num = 0;
+        // 定义摇卦事件
+        $('.button').on('click', function () {
+            if (this.innerHTML == '开始') {
+                if (num >= 6) {
+                    return;
+                }
+                if (lop1 || lop2 || lop3) {
+                    return;
+                }
+                num++;
+                lop1 = setInterval(function () {
+                    a = rand();
+                    $('.qian1').html(a);
+                },10);
+
+                lop2 = setInterval(function () {
+                    b = rand();
+                    $('.qian2').html(b);
+                },10);
+
+                lop3 = setInterval(function () {
+                    c = rand();
+                    $('.qian3').html(c);
+                },10);
+                this.innerHTML = '停';
+            } else if (this.innerHTML == '停') {
+                // 清除定时器
+                clearInterval(lop1);
+                clearInterval(lop2);
+                clearInterval(lop3);
+                lop1 = null;
+                lop2 = null;
+                lop3 = null;
+
+                // 成一爻
+                list.push(a);
+                list.push(b);
+                list.push(c);
+
+                // 成一卦
+                all.unshift(list);
+
+                if (num < 6) {
+                    this.innerHTML = '开始';
+                    console.log(list);
+                    console.log(all);
+                } else {
+                    this.innerHTML = '完成';
+                }
+                list = [];
+            } else{
+                $('.content1').fadeOut();
+                $('.content2').fadeIn();
+
+                // 遍历出图
+                for (var i = 0; i < 6; i++) {
+                    var num2 = 0;
+                    for (var j = 0; j < 3; j++) {
+                        num2 += all[i][j];
+//                        console.log(all[i][j]);
+                    }
+                    switch (num2) {
+                        case 0:
+                            $('<img src="./image/0.png">').appendTo('.content2 .img');
+                            break;
+                        case 1:
+                            $('<img src="./image/1.png">').appendTo('.content2 .img');
+                            break;
+                        case 2:
+                            $('<img src="./image/2.png">').appendTo('.content2 .img');
+                            break;
+                        case 3:
+                            $('<img src="./image/3.png">').appendTo('.content2 .img');
+                            break;
+                        default :
+                            break;
+                    }
+                    news.push((num2 + 1) % 2);
+                }
+                console.log(news);
+                var code = news.join('');
+                switch (code) {
+                    case '000000' :
+                        $('.content2 p').html('坤');
+                        break;
+                    case '111111' :
+                        $('.content2 p').html('乾');
+                        break;
+                    case '101101' :
+                        $('.content2 p').html('离');
+                        break;
+                    case '010010' :
+                        $('.content2 p').html('坎');
+                        break;
+                    case '100100' :
+                        $('.content2 p').html('艮');
+                        break;
+                    case '001001' :
+                        $('.content2 p').html('震');
+                        break;
+                    case '110110' :
+                        $('.content2 p').html('风');
+                        break;
+                    case '011011' :
+                        $('.content2 p').html('兑');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+</script>
+</html>
