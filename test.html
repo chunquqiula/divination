@@ -73,6 +73,8 @@
         var all = [];
         //定义新的数组
         var news = [];
+        // 定义动爻变化数组
+        var changes = [];
         
         //定义三个定时器
         var lop1,lop2,lop3;
@@ -108,9 +110,9 @@
                 clearInterval(lop1);
                 clearInterval(lop2);
                 clearInterval(lop3);
-                lop1 = null;
-                lop2 = null;
-                lop3 = null;
+                lop1 = undefined;
+                lop2 = undefined;
+                lop3 = undefined;
 
                 // 成一爻
                 list.push(a);
@@ -122,8 +124,8 @@
 
                 if (num < 6) {
                     this.innerHTML = '开始';
-                    console.log(list);
-                    console.log(all);
+                    //console.log(list);
+                    //console.log(all);
                 } else {
                     this.innerHTML = '完成';
                 }
@@ -155,6 +157,7 @@
                         default :
                             break;
                     }
+                    changes.push(num2);
                     news.push((num2 + 1) % 2);
                 }
                 console.log(news);
@@ -187,6 +190,12 @@
                     default:
                         break;
                 }
+                
+                guaData.forEach(function (gua, index) {
+                    if (gua.code === code) {
+                        $('.content2 p').html(gua.name);
+                    }
+                })
             }
         });
 
